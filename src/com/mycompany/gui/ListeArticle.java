@@ -108,10 +108,35 @@ public class ListeArticle extends BaseForm{
         
         });
         
+          Label modifier=new Label("");
+        supprimer.setUIID("NewsTopLine");
+        Style modifierStyle= new Style(modifier.getUnselectedStyle());
+        modifierStyle.setFgColor(0xf7ad02);
+        
+        FontImage modifierImage=FontImage.createMaterial(FontImage.MATERIAL_MODE_EDIT, modifierStyle);
+        modifier.setIcon(modifierImage);
+        modifier.setTextPosition(LEFT);
+                
+         modifier.addPointerPressedListener(l ->{
+        
+          Dialog dig= new Dialog("Modifier");
+          
+          if(dig.show("Modification","Vous voulez modifier cet article ?","Annuler","Oui"))
+          {
+              dig.dispose();
+          }
+          else
+          {
+              dig.dispose();
+             serviceArticle.getInstance().updateArticle(art);
+            
+                    new ListeArticle(res).show();
+                   refreshTheme();
+          }
         
         
-        
-           cnt.add(BorderLayout.CENTER,BoxLayout.encloseY(BoxLayout.encloseX(titr),BoxLayout.encloseX(typ,supprimer)));
+        });
+           cnt.add(BorderLayout.CENTER,BoxLayout.encloseY(BoxLayout.encloseX(titr),BoxLayout.encloseX(typ,supprimer,modifier)));
         //cnt.add(BorderLayout.CENTER,BoxLayout.encloseY(BoxLayout.encloseX(supprimer)));
         add(cnt);
     }

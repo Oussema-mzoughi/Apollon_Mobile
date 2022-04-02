@@ -156,5 +156,28 @@ public class serviceArticle {
 
     }
     
+     
+     
+     
+     
+     public boolean updateArticle(Article article) {
+        
+       
+       String url=Statics.BASE_URL+"/article/updatearticle_api?titre="+article.getTitre()+"&description="+article.getDescription()
+                +"&type="+article.getType()+"&img="+article.getImg();
+
+      
+     req.setUrl(url);
+        
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return true;
+    }
     
 }
