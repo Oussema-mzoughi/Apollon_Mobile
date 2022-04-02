@@ -14,6 +14,7 @@ import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextArea;
@@ -21,6 +22,7 @@ import com.codename1.ui.TextField;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.mycompany.entities.Article;
 import com.mycompany.services.serviceArticle;
@@ -49,12 +51,12 @@ public class ListeArticle extends BaseForm{
         
         for ( Article art : list)
         {
-            addButton(art.getTitre(),art.getDescription(),art.getType(),art.getImg(),art.getDate());
+            addButton(art.getTitre(),art.getDescription(),art.getType(),art.getImg(),art.getDate(),art,res);
         }
         
     }
 
-    private void addButton(String titre, String description, String Type, String img,String date) {
+    private void addButton(String titre, String description, String Type, String img,String date,Article art,Resources res) {
         Container cnt= new Container(new BorderLayout());
         TextArea titr=new TextArea("titre :"+titre);
         titr.setUIID("NewTopLine");
@@ -75,9 +77,42 @@ public class ListeArticle extends BaseForm{
         
       
        
-        cnt.add(BorderLayout.CENTER,BoxLayout.encloseY(BoxLayout.encloseX(titr)
-        ,BoxLayout.encloseX(typ),BoxLayout.encloseX(image)));
-  
+     
+            
+        Label supprimer=new Label("");
+        supprimer.setUIID("NewsTopLine");
+        Style supprimerStyle= new Style(supprimer.getUnselectedStyle());
+        supprimerStyle.setFgColor(0xf21f1f);
+        
+        FontImage supprimerImage=FontImage.createMaterial(FontImage.MATERIAL_DELETE, supprimerStyle);
+        supprimer.setIcon(supprimerImage);
+        supprimer.setTextPosition(RIGHT);
+        
+        supprimer.addPointerPressedListener(l ->{
+        
+          Dialog dig= new Dialog("Suppression");
+          
+          if(dig.show("Suppression","Vous voulez supprimer cet article ?","Annuler","Oui"))
+          {
+              dig.dispose();
+          }
+          else
+          {
+              dig.dispose();
+             serviceArticle.getInstance().deleteArticle(art.getId());
+            
+                    new ListeArticle(res).show();
+                   refreshTheme();
+          }
+        
+        
+        });
+        
+        
+        
+        
+           cnt.add(BorderLayout.CENTER,BoxLayout.encloseY(BoxLayout.encloseX(titr),BoxLayout.encloseX(typ,supprimer)));
+        //cnt.add(BorderLayout.CENTER,BoxLayout.encloseY(BoxLayout.encloseX(supprimer)));
         add(cnt);
     }
     

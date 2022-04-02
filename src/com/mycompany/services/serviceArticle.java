@@ -144,5 +144,17 @@ public class serviceArticle {
     }
     
     
+     public void deleteArticle(int id) {
+        ConnectionRequest con = new ConnectionRequest();
+        con.setUrl(Statics.BASE_URL+"/article/deletearticle_api/"+id);
+        con.setPost(false);
+        con.addResponseListener((evt) -> {
+            System.out.println(con.getResponseData());
+
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+
+    }
+    
     
 }
